@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  auction-app-chisso:
+    container_name: auction-app-chisso
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    command: npx nodemon --watch . -e js app.js
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules 
+    depends_on:
+      - auction-mongodb-chisso
+    environment:
+      NODE_ENV: development
+
+  auction-mongodb-chisso:
+    image: mongo:latest
+    container_name: auction-mongodb-chisso
+    volumes:
+      - mongodb_data:/data/db 
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodb_data: 
