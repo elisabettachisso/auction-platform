@@ -11,11 +11,12 @@ services:
       - "3000:3000"
     volumes:
       - ./app:/usr/src/app
-      - /usr/src/app/node_modules 
     depends_on:
       - auction-mongodb-chisso
     environment:
-      NODE_ENV: development
+      MONGODB_URI: mongodb://auction-mongodb-chisso:27017
+      DB_NAME: auction
+      
 
   auction-mongodb-chisso:
     image: mongo:latest

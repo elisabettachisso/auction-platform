@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
-const MONGODB_URI = "mongodb://mongosrv";
-const DB_NAME = "auction";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const DB_NAME = process.env.DB_NAME || "auction-db";
 let cachedDb;
 
 module.exports = {

@@ -1,7 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const router = require("routes/route.js");
-const auth = require("auth.js");
+const router = require("./routes/route.js");
+const auth = require("./auth.js");
 const app = express();
 const port = 3000;
 
