@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/vue@3"></script>
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+VVcrD2+z7vIBT8iFFaJ/7mWRSsaQ"
+    crossorigin="anonymous"
+  ></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Sistema Aste</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/login.html">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="/register.html">Registrati</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <h1 class="text-center">Aste Disponibili</h1>
+    <div id="home-app" class="row">
+      <div
+        class="col-md-4 mb-4"
+        v-for="auction in auctions"
+        :key="auction.id"
+      >
+        <div class="card">
+          <img :src="auction.image" class="card-img-top" alt="Auction Image" />
+          <div class="card-body">
+            <h5 class="card-title">{{ auction.title }}</h5>
+            <p class="card-text">{{ auction.description }}</p>
+            <p class="card-text"><strong>Prezzo Corrente:</strong> {{ auction.current_price }} €</p>
+            <p class="card-text"><strong>Data di Fine:</strong> {{ auction.end_date }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3"></script>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          auctions: [],
+        };
+      },
+      async created() {
+        try {
+          const response = await fetch('/api/auctions');
+          if (response.ok) {
+            this.auctions = await response.json();
+          }
+        } catch (error) {
+          console.error('Errore:', error);
+        }
+      },
+    });
+    app.mount('#home-app');
+  </script>
+</body>
+</html>

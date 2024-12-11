@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrazione</title>
+  <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+  <div id="register-app">
+    <h1>Registrazione</h1>
+    <form @submit.prevent="register">
+      <div>
+        <label for="username">Username:</label>
+        <input id="username" v-model="username" type="text" required>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input id="password" v-model="password" type="password" required>
+      </div>
+      <div>
+        <label for="name">Nome:</label>
+        <input id="name" v-model="name" type="text" required>
+      </div>
+      <div>
+        <label for="surname">Cognome:</label>
+        <input id="surname" v-model="surname" type="text" required>
+      </div>
+      <button type="submit">Registrati</button>
+    </form>
+    <p v-if="message">{{ message }}</p>
+  </div>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          username: '',
+          password: '',
+          name: '',
+          surname: '',
+          message: null,
+        };
+      },
+      methods: {
+        async register() {
+          try {
+            const response = await fetch('/api/auth/signup', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                username: this.username,
+                password: this.password,
+                name: this.name,
+                surname: this.surname,
+              }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+              this.message = 'Registrazione avvenuta con successo!';
+            } else {
+              this.message = `Errore: ${result.message}`;
+            }
+          } catch (error) {
+            this.message = 'Errore durante la registrazione.';
+          }
+        },
+      },
+    });
+
+    app.mount('#register-app');
+  </script>
+</body>
+</html>

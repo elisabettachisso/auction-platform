@@ -1,30 +1,32 @@
-version: '3.8'
-
+version: "3.8"
 services:
-  auction-app-chisso:
-    container_name: auction-app-chisso
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    command: npx nodemon --watch . -e js app.js
+  chisso-app:
+    build: .
+    container_name: chisso-auction-platform-app
     ports:
       - "3000:3000"
-    volumes:
-      - ./app:/usr/src/app
-    depends_on:
-      - auction-mongodb-chisso
     environment:
-      MONGODB_URI: mongodb://auction-mongodb-chisso:27017
-      DB_NAME: auction
-      
+      - PORT=3000
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=elisabetta
+      - DB_NAME=auction_platform
+    depends_on:
+      - chisso-mysql
 
-  auction-mongodb-chisso:
-    image: mongo:latest
-    container_name: auction-mongodb-chisso
-    volumes:
-      - mongodb_data:/data/db 
+  chisso-mysql:
+    image: mysql:8.0
+    container_name: chisso-auction-platform-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: elisabetta
+      MYSQL_DATABASE: auction_platform
     ports:
-      - "27017:27017"
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
-  mongodb_data: 
+  db_data:
